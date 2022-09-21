@@ -44,6 +44,7 @@ def prepare(df):
                                         'PATIENT DECLINED TO ANSWER':'UNKNOWN/NOT SPECIFIED',
                                         'UNABLE TO OBTAIN':'UNKNOWN/NOT SPECIFIED',
                                        }}, inplace=True)
+    return df
     
 
 #handling missing values
