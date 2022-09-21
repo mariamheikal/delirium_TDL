@@ -6,9 +6,6 @@ import datawig
 def prepare(df):
     df=df[df.AGE>18]
     df_cols=list(df)
-    if ['SUBJECT_ID','HADM_ID', 'ICUSTAY_ID'] in df_cols:
-        print('OK')
-        df.drop(['SUBJECT_ID','HADM_ID', 'ICUSTAY_ID'],axis=1,inplace=True)
     cols_to_drop=[]
     cols=list(df)
     for col in df_cols:
