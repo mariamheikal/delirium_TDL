@@ -13,6 +13,7 @@ def prepare(df):
         if df[col].isnull().sum()/_shape[0]>0.30:
             cols_to_drop.append(col)
     df.drop(cols_to_drop,inplace=True,axis=1)
+    df.drop_duplicates(inplace=True)
     df.replace({'ETHNICITY': {'HISPANIC/LATINO - COLOMBIAN':'HISPANIC',
                                         'HISPANIC OR LATINO':'HISPANIC',
                                         'HISPANIC/LATINO - CENTRAL AMERICAN (OTHER)':'HISPANIC',
