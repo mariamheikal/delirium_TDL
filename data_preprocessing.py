@@ -8,6 +8,7 @@ def prepare(df):
     df_cols=list(df)
     cols_to_drop=[]
     cols=list(df)
+    _shape=df.shape
     for col in df_cols:
         if df[col].isnull().sum()/_shape[0]>0.30:
             cols_to_drop.append(col)
@@ -42,7 +43,7 @@ def prepare(df):
                                         'PATIENT DECLINED TO ANSWER':'UNKNOWN/NOT SPECIFIED',
                                         'UNABLE TO OBTAIN':'UNKNOWN/NOT SPECIFIED',
                                        }}, inplace=True)
-    return df
+    return 
     
 
 #handling missing values
