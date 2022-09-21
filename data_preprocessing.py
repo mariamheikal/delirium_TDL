@@ -43,7 +43,9 @@ def prepare(df):
                                         'PATIENT DECLINED TO ANSWER':'UNKNOWN/NOT SPECIFIED',
                                         'UNABLE TO OBTAIN':'UNKNOWN/NOT SPECIFIED',
                                        }}, inplace=True)
-    return 
+    if 'Unnamed: 0' in list(df):
+      df.drop("Unnamed: 0",inplace=True,axis=1)
+    return df
     
 
 #handling missing values
