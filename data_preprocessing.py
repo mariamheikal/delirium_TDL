@@ -47,7 +47,23 @@ def prepare(df,threshold):
     if 'Unnamed: 0' in list(df):
       df.drop("Unnamed: 0",inplace=True,axis=1)
     return df
-    
+
+def find_categorical_cols(df,target=""):
+  cols=df.columns
+  cat_features=[]
+  i=0
+  for col in cols:
+      if len(unique(df[col]))<=50 and col!=target:
+          cat_features.append(col)
+          i=i+1
+  print(i)
+  print(cat_features)
+  return cat_features
+
+def unique(lst):
+    lst_to_set = set(lst)
+    unique_list = list(lst_to_set)
+    return unique_list
 
 #handling missing values
 def mergeDFs(df,df_imputed,imputed_col):
