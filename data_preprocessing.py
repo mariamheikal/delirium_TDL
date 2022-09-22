@@ -50,6 +50,23 @@ def prepare(df,threshold):
             df.drop(col,inplace=True,axis=1)
     return df
 
+def downsample(df,target,factor):
+  target_labels=df[target].values
+  df = df.sample(frac=1)
+  cols=list(df)
+  X=df.values
+  onesX=[]
+  zeroesX=[]
+  for x in X:
+    if x[-1]==1:
+      onesX.append(x)
+    else:
+      zeroesX.append(x)
+  zer_len=int(len(onesX)*factor)
+  X=onesX+zeroesX[0:zer_len]
+  df_downsampled=pd.DataFrame(X,columns=cols)
+  return df_downsampled
+
 def find_categorical_cols(df,target=""):
   cols=df.columns
   cat_features=[]
