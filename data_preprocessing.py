@@ -44,8 +44,10 @@ def prepare(df,threshold):
                                         'PATIENT DECLINED TO ANSWER':'UNKNOWN/NOT SPECIFIED',
                                         'UNABLE TO OBTAIN':'UNKNOWN/NOT SPECIFIED',
                                        }}, inplace=True)
-    if 'Unnamed: 0' in list(df):
-      df.drop("Unnamed: 0",inplace=True,axis=1)
+    cols_to_drop=['SUBJECT_ID', 'HADM_ID', 'ICUSTAY_ID',"Unnamed: 0"]
+    for col in cols_to_drop:
+        if col in list(df):
+            df.drop(col,inplace=True,axis=1)
     return df
 
 def find_categorical_cols(df,target=""):
