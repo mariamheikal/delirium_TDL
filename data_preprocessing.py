@@ -178,7 +178,8 @@ def split(df,target):
   xtest[target]=ytest
   return xtrain, xtest
 
-def pipeline(df,target,threshold,downsample=False, factor=0):
+#scale target option
+def pipeline(df,target,threshold,downsample=False, factor=0, scale_target=False):
   #preporcess data
   df=prepare(df,threshold)
 
@@ -192,7 +193,7 @@ def pipeline(df,target,threshold,downsample=False, factor=0):
   df_train,df_test=encode(df_train,df_test)
 
   #normalize numerical data
-  df_train,df_test=normalize(df_train,df_test)
+  df_train,df_test=normalize(df_train,df_test,scale_target)
 
   #downsampling data
   if downsample:
