@@ -74,7 +74,7 @@ def mergeDFs(df,df_imputed,imputed_col):
     df_imputed2=df_imputed.drop([imputed_col,l],axis=1)
   df=df[df[imputed_col].isnull()==False]
   df_imputed2=df_imputed2.rename(columns = {imputed_col+'_imputed':imputed_col})
-  return pd.concat([df,df_imputed2])
+  return pd.concat([df,df_imputed2],sort=False)
 
 def impute(df):
     cols=list(df)
