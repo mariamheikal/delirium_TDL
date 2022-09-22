@@ -3,14 +3,14 @@ import numpy as np
 import datawig
 
 #preparing dataset
-def prepare(df):
+def prepare(df,threshold):
     df=df[df.AGE>18]
     df_cols=list(df)
     cols_to_drop=[]
     cols=list(df)
     _shape=df.shape
     for col in df_cols:
-        if df[col].isnull().sum()/_shape[0]>0.30:
+        if df[col].isnull().sum()/_shape[0]>threshold:
             cols_to_drop.append(col)
     df.drop(cols_to_drop,inplace=True,axis=1)
     df.drop_duplicates(inplace=True)
