@@ -179,31 +179,31 @@ def split(df,target):
   return xtrain, xtest
 
 #scale target option
-def pipeline(df, target, prepare=False, split=False,
-impute=False, normalize=False, downsample=False, 
-encode=False, scale_target=False, threshold=0.35, factor=1):
+def pipeline(df, target, prepare_f=False, split_f=False,
+impute_f=False, normalize_f=False, downsample_f=False, 
+encode_f=False, scale_target_f=False, threshold=0.35, factor=1):
   #preporcess data
-  if prepare:
+  if prepare_f:
     df=prepare(df,threshold)
 
   #split data
-  if split:
+  if split_f:
     df_train,df_test=split(df,target)
 
   #impute missing values
-  if impute:
+  if impute_f:
     df_train,df_test=impute(df_train,df_test)
 
   #encode categorical variables
-  if encode:
+  if encode_f:
     df_train,df_test=encode(df_train,df_test,target)
 
   #normalize numerical data
-  if normalize:
-    df_train,df_test=normalize(df_train,df_test,scale_target)
+  if normalize_f:
+    df_train,df_test=normalize(df_train,df_test,scale_target_f)
 
   #downsampling data
-  if downsample:
+  if downsample_f:
     df_train=downsample(df_train,factor)
 
   return df_train,df_test
