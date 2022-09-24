@@ -173,7 +173,7 @@ def split(df,target):
   df=df.sample(frac=1, random_state=0)
   y = df[target].values
   X=df.drop([target], axis=1)
-  xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.30, random_state=0)
+  xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.20, random_state=0)
   xtrain[target]=ytrain
   xtest[target]=ytest
   return xtrain, xtest
