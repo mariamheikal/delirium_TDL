@@ -136,13 +136,13 @@ def encode(df_train,df_test,target):
   for col in cols:
       if col not in cols2:
           train_looe[col]=df_train[col]
-  train_looe['Delirium']=y
+  train_looe[target]=y
   cols=list(df_test)
   cols2=list(test_looe)
   for col in cols:
       if col not in cols2:
           test_looe[col]=df_test[col]
-  test_looe['Delirium']=ytest
+  test_looe[target]=ytest
   return train_looe,test_looe
 
 
