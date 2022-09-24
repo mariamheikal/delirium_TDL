@@ -121,7 +121,7 @@ def impute(df_train,df_test):
 
 
 def encode(df_train,df_test,target):
-  cols=list(df_train)
+  
   cat_cols=find_categorical_cols(df_train,target)
   y = df_train[target].values
   X=df_train.drop([target], axis=1)
@@ -129,7 +129,7 @@ def encode(df_train,df_test,target):
   Xtest=df_test.drop([target], axis=1)
   encoder = ce.LeaveOneOutEncoder()
   train_looe = encoder.fit_transform(X[cat_cols], y)
-  test_looe = encoder.transform(Xtest)    
+  test_looe = encoder.transform(Xtest[cat_cols])    
 
   cols=list(df_train)
   cols2=list(train_looe)
