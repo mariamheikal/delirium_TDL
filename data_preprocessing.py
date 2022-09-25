@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import datawig
 import category_encoders as ce
+from tgan.model import TGANModel
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import quantile_transform
 from sklearn.model_selection import train_test_split
@@ -53,6 +54,18 @@ def find_categorical_cols(df,target="",cat_col_thresh):
           cat_features.append(col)
           i=i+1
   return cat_features
+
+def oversample(df, target, cat_cols_thresh,num_samples):
+    cols=list(df)
+    cat_cols=find_categorical_cols(df,target,cat_col_thresh)
+    for cat_col in cat_cols:
+        cols.remove(cat_Col)
+    cols.remove(target)
+    tgan = TGANModel(continuous_columns)
+    tgan.fit(df)
+    samples = tgan.sample(num_samples)
+    return samples
+    
 
 #handling missing values
 def mergeDFs(df,df_imputed,imputed_col):
