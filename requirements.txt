@@ -1,2 +1,3 @@
 datawig
 category_encoders
+tgan
