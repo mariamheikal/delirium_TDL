@@ -45,7 +45,7 @@ def unique(lst):
     unique_list = list(lst_to_set)
     return unique_list
 
-def find_categorical_cols(df,target="",cat_col_thresh):
+def find_categorical_cols(df,target,cat_col_thresh):
   cols=df.columns
   cat_features=[]
   i=0
