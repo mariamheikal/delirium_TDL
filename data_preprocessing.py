@@ -181,7 +181,11 @@ def split(df,target):
 #scale target option
 def pipeline(df, target, prepare_f=False, split_f=False,
 impute_f=False, normalize_f=False, downsample_f=False, 
-encode_f=False, scale_target_f=False, threshold=0.35, factor=1):
+encode_f=False, scale_target_f=False, threshold=0.35, factor=2):
+  #downsampling data
+  if downsample_f:
+    df=downsample(df,factor)
+    
   #preporcess data
   if prepare_f:
     df=prepare(df,threshold)
@@ -201,10 +205,6 @@ encode_f=False, scale_target_f=False, threshold=0.35, factor=1):
   #normalize numerical data
   if normalize_f:
     df_train,df_test=normalize(df_train,df_test,scale_target_f)
-
-  #downsampling data
-  if downsample_f:
-    df_train=downsample(df_train,factor)
 
   return df_train,df_test
 
