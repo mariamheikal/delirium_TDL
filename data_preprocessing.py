@@ -49,7 +49,7 @@ def find_categorical_cols(df,target=""):
   cat_features=[]
   i=0
   for col in cols:
-      if len(unique(df[col]))<=50 and col!=target:
+      if len(unique(df[col]))<=150 and col!=target:
           cat_features.append(col)
           i=i+1
   return cat_features
