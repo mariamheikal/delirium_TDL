@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import quantile_transform
 from sklearn.model_selection import train_test_split
 #preparing dataset
-def prepare(df,threshold):
+def prepare(df,threshold,cols_to_drop):
     df=df[df.AGE>18]
     df_cols=list(df)
     cols_to_drop=[]
@@ -16,37 +16,7 @@ def prepare(df,threshold):
             cols_to_drop.append(col)
     df.drop(cols_to_drop,inplace=True,axis=1)
     df.drop_duplicates(inplace=True)
-    df.replace({'ETHNICITY': {'HISPANIC/LATINO - COLOMBIAN':'HISPANIC',
-                                        'HISPANIC OR LATINO':'HISPANIC',
-                                        'HISPANIC/LATINO - CENTRAL AMERICAN (OTHER)':'HISPANIC',
-                                        'HISPANIC/LATINO - DOMINICAN':'HISPANIC',
-                                        'HISPANIC/LATINO - CUBAN':'HISPANIC',
-                                        'HISPANIC/LATINO - GUATEMALAN':'HISPANIC',
-                                        'HISPANIC/LATINO - HONDURAN':'HISPANIC',
-                                        'HISPANIC/LATINO - MEXICAN':'HISPANIC',
-                                        'HISPANIC/LATINO - PUERTO RICAN':'HISPANIC',
-                                        'HISPANIC/LATINO - SALVADORAN':'HISPANIC',
-                                        'AMERICAN INDIAN/ALASKA NATIVE':'AMERICAN INDIAN',
-                                        'AMERICAN INDIAN/ALASKA NATIVE FEDERALLY RECOGNIZED TRIBE':'AMERICAN INDIAN',
-                                        'ASIAN - ASIAN INDIAN':'ASIAN', 
-                                        'ASIAN - CAMBODIAN':'ASIAN',
-                                        'ASIAN - CHINESE':'ASIAN', 
-                                        'ASIAN - FILIPINO':'ASIAN', 
-                                        'ASIAN - JAPANESE':'ASIAN',
-                                        'ASIAN - KOREAN':'ASIAN', 
-                                        'ASIAN - OTHER':'ASIAN', 
-                                        'ASIAN - THAI':'ASIAN',
-                                        'ASIAN - VIETNAMESE':'ASIAN',
-                                        'BLACK/AFRICAN':'BLACK', 
-                                        'BLACK/AFRICAN AMERICAN':'BLACK',
-                                        'BLACK/CAPE VERDEAN':'BLACK', 
-                                        'BLACK/HAITIAN':'BLACK',
-                                        'WHITE - BRAZILIAN':'WHITE', 'WHITE - EASTERN EUROPEAN':'WHITE',
-                                        'WHITE - OTHER EUROPEAN':'WHITE', 'WHITE - RUSSIAN':'WHITE',
-                                        'PATIENT DECLINED TO ANSWER':'UNKNOWN/NOT SPECIFIED',
-                                        'UNABLE TO OBTAIN':'UNKNOWN/NOT SPECIFIED',
-                                       }}, inplace=True)
-    cols_to_drop=['SUBJECT_ID', 'HADM_ID', 'ICUSTAY_ID',"Unnamed: 0"]
+    #cols_to_drop=['SUBJECT_ID', 'HADM_ID', 'ICUSTAY_ID',"Unnamed: 0"]
     for col in cols_to_drop:
         if col in list(df):
             df.drop(col,inplace=True,axis=1)
@@ -181,14 +151,14 @@ def split(df,target):
 #scale target option
 def pipeline(df, target, prepare_f=False, split_f=False,
 impute_f=False, normalize_f=False, downsample_f=False, 
-encode_f=False, scale_target_f=False, threshold=0.35, factor=2):
+encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[]):
   #downsampling data
   if downsample_f:
     df=downsample(df,target,factor)
     
   #preporcess data
   if prepare_f:
-    df=prepare(df,threshold)
+    df=prepare(df,threshold,cols_to_drop)
 
   #split data
   if split_f:
