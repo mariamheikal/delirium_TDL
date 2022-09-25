@@ -184,7 +184,7 @@ impute_f=False, normalize_f=False, downsample_f=False,
 encode_f=False, scale_target_f=False, threshold=0.35, factor=2):
   #downsampling data
   if downsample_f:
-    df=downsample(df,factor)
+    df=downsample(df,target,factor)
     
   #preporcess data
   if prepare_f:
