@@ -44,12 +44,12 @@ def unique(lst):
     unique_list = list(lst_to_set)
     return unique_list
 
-def find_categorical_cols(df,target=""):
+def find_categorical_cols(df,target="",cat_col_thresh):
   cols=df.columns
   cat_features=[]
   i=0
   for col in cols:
-      if len(unique(df[col]))<=150 and col!=target:
+      if len(unique(df[col]))<=cat_col_thresh and col!=target:
           cat_features.append(col)
           i=i+1
   return cat_features
@@ -90,9 +90,9 @@ def impute(df_train,df_test):
     return df_train, df_test
 
 
-def encode(df_train,df_test,target):
+def encode(df_train,df_test,target,cat_col_thresh):
   
-  cat_cols=find_categorical_cols(df_train,target)
+  cat_cols=find_categorical_cols(df_train,target,cat_col_thresh)
   y = df_train[target].values
   X=df_train.drop([target], axis=1)
   ytest = df_test[target].values
@@ -151,7 +151,7 @@ def split(df,target):
 #scale target option
 def pipeline(df, target, prepare_f=False, split_f=False,
 impute_f=False, normalize_f=False, downsample_f=False, 
-encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[]):
+encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[],cat_col_thresh):
   #downsampling data
   if downsample_f:
     df=downsample(df,target,factor)
@@ -170,7 +170,7 @@ encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[]):
 
   #encode categorical variables
   if encode_f:
-    df_train,df_test=encode(df_train,df_test,target)
+    df_train,df_test=encode(df_train,df_test,target,cat_col_thresh)
 
   #normalize numerical data
   if normalize_f:
