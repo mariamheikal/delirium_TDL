@@ -177,7 +177,6 @@ encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[],c
 
   #normalize numerical data
   if normalize_f:
-    df_train,df_test=normalize(df_train,df_test,scale_target_f)
+    df_train,df_test=normalize(df_train,df_test,target,scale_target_f)
 
   return df_train,df_test
-
