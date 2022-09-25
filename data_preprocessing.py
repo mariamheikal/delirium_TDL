@@ -164,7 +164,7 @@ def split(df,target):
 #scale target option
 def pipeline(df, target, prepare_f=False, split_f=False,
 impute_f=False, normalize_f=False, downsample_f=False, 
-encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[],cat_col_thresh):
+encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[],cat_col_thresh=100,df_train=np.nan,df_test=np.nan):
   #downsampling data
   if downsample_f:
     df=downsample(df,target,factor)
