@@ -102,24 +102,25 @@ def encode(df_train,df_test,target,cat_col_thresh,en_strategy='le'):
     encoder = ce.LeaveOneOutEncoder()
     train = encoder.fit_transform(X[cat_cols], y)
     test = encoder.transform(Xtest[cat_cols])  
+    cols=list(df_train)
+    cols2=list(train)
+    for col in cols:
+        if col not in cols2:
+            train[col]=df_train[col]
+    train[target]=y
+    cols=list(df_test)
+    cols2=list(test)
+    for col in cols:
+        if col not in cols2:
+            test[col]=df_test[col]
+    test[target]=ytest
   else:
     encoder=preprocessing.LabelEncoder()
     for i in cat_cols:
-        train[i]= encoder.fit_transform(X[i])
-        test[i]= encoder.transform(Xtest[i])
-        
-  cols=list(df_train)
-  cols2=list(train)
-  for col in cols:
-      if col not in cols2:
-          train[col]=df_train[col]
-  train[target]=y
-  cols=list(df_test)
-  cols2=list(test)
-  for col in cols:
-      if col not in cols2:
-          test[col]=df_test[col]
-  test[target]=ytest
+        df_train[i]= encoder.fit_transform(df_train[i])
+        df_test[i]= encoder.transform(df_test[i])
+    return df_train,df_test
+    
   return train,test
 
 
