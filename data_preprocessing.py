@@ -94,19 +94,23 @@ def impute(df_train,df_test):
     return df_train, df_test
 
 
-def encode(df_train,df_test,target,cat_col_thresh,strategy='le'):
+def encode(df_train,df_test,target,cat_col_thresh,en_strategy='le'):
   
   cat_cols=find_categorical_cols(df_train,target,cat_col_thresh)
   y = df_train[target].values
   X=df_train.drop([target], axis=1)
   ytest = df_test[target].values
   Xtest=df_test.drop([target], axis=1)
-  if strategy=='looe':
+  if en_strategy=='looe':
     encoder = ce.LeaveOneOutEncoder()
+    train = encoder.fit_transform(X[cat_cols], y)
+    test = encoder.transform(Xtest[cat_cols])  
   else:
     encoder=preprocessing.LabelEncoder()
-  train = encoder.fit_transform(X[cat_cols], y)
-  test = encoder.transform(Xtest[cat_cols])    
+    for i in cat_cols:
+        train[i]= label_encoder.fit_transform(X[i])
+        test[i]= label_encoder.transform(Xtest[i])
+        
 
   cols=list(df_train)
   cols2=list(train)
@@ -158,7 +162,7 @@ def split(df,target):
 #scale target option
 def pipeline(df, target, prepare_f=False, split_f=False,
 impute_f=False, normalize_f=False, downsample_f=False, 
-encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[],cat_col_thresh=100,df_train=np.nan,df_test=np.nan):
+encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[],cat_col_thresh=100,df_train=np.nan,df_test=np.nan,en_strategy='le'):
   #downsampling data
   if downsample_f:
     df=downsample(df,target,factor)
@@ -177,7 +181,7 @@ encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[],c
 
   #encode categorical variables
   if encode_f:
-    df_train,df_test=encode(df_train,df_test,target,cat_col_thresh)
+    df_train,df_test=encode(df_train,df_test,target,cat_col_thresh,en_strategy)
 
   #normalize numerical data
   if normalize_f:
