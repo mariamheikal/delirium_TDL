@@ -4,6 +4,7 @@ import datawig
 import category_encoders as ce
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import quantile_transform
+from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 #preparing dataset
 def prepare(df,threshold,cols_to_drop):
@@ -93,30 +94,33 @@ def impute(df_train,df_test):
     return df_train, df_test
 
 
-def encode(df_train,df_test,target,cat_col_thresh):
+def encode(df_train,df_test,target,cat_col_thresh,strategy='le'):
   
   cat_cols=find_categorical_cols(df_train,target,cat_col_thresh)
   y = df_train[target].values
   X=df_train.drop([target], axis=1)
   ytest = df_test[target].values
   Xtest=df_test.drop([target], axis=1)
-  encoder = ce.LeaveOneOutEncoder()
-  train_looe = encoder.fit_transform(X[cat_cols], y)
-  test_looe = encoder.transform(Xtest[cat_cols])    
+  if strategy=='looe':
+    encoder = ce.LeaveOneOutEncoder()
+  else:
+    encoder=preprocessing.LabelEncoder()
+  train = encoder.fit_transform(X[cat_cols], y)
+  test = encoder.transform(Xtest[cat_cols])    
 
   cols=list(df_train)
-  cols2=list(train_looe)
+  cols2=list(train)
   for col in cols:
       if col not in cols2:
-          train_looe[col]=df_train[col]
-  train_looe[target]=y
+          train[col]=df_train[col]
+  train[target]=y
   cols=list(df_test)
-  cols2=list(test_looe)
+  cols2=list(test)
   for col in cols:
       if col not in cols2:
-          test_looe[col]=df_test[col]
-  test_looe[target]=ytest
-  return train_looe,test_looe
+          test[col]=df_test[col]
+  test[target]=ytest
+  return train,test
 
 
 def normalize(df_train,df_test,target,scale_target=False):
