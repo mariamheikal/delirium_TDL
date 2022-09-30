@@ -55,9 +55,6 @@ def find_categorical_cols(df,target,cat_col_thresh):
           i=i+1
   return cat_features
 
-
-    
-
 #handling missing values
 def mergeDFs(df,df_imputed,imputed_col):
   l=imputed_col+'_imputed_proba'
@@ -108,10 +105,9 @@ def encode(df_train,df_test,target,cat_col_thresh,en_strategy='le'):
   else:
     encoder=preprocessing.LabelEncoder()
     for i in cat_cols:
-        train[i]= label_encoder.fit_transform(X[i])
-        test[i]= label_encoder.transform(Xtest[i])
+        train[i]= encoder.fit_transform(X[i])
+        test[i]= encoder.transform(Xtest[i])
         
-
   cols=list(df_train)
   cols2=list(train)
   for col in cols:
