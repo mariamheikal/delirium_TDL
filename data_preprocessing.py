@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import datawig
 import category_encoders as ce
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import quantile_transform
@@ -91,9 +90,7 @@ def impute(df_train,df_test):
     return df_train, df_test
 
 
-def encode(df_train,df_test,target,cat_col_thresh,en_strategy='le'):
-  
-  cat_cols=find_categorical_cols(df_train,target,cat_col_thresh)
+def encode(df_train,df_test,target,cat_cols,en_strategy='le'):
   y = df_train[target].values
   X=df_train.drop([target], axis=1)
   ytest = df_test[target].values
@@ -115,28 +112,48 @@ def encode(df_train,df_test,target,cat_col_thresh,en_strategy='le'):
             test[col]=df_test[col]
     test[target]=ytest
   else:
-    encoder=preprocessing.LabelEncoder()
     for i in cat_cols:
-        df_train[i]= encoder.fit_transform(df_train[i])
-        df_test[i]= encoder.transform(df_test[i])
+      encoder=preprocessing.LabelEncoder()
+      df_train[i]= encoder.fit_transform(df_train[i])
+      df_test[i]= encoder.transform(df_test[i])
     return df_train,df_test
     
   return train,test
 
 
-def normalize(df_train,df_test,target,scale_target=False):
-  X_train=df_train.drop(target,axis=1).values
-  X_train =quantile_transform(X_train, random_state=0, copy=True)
+def normalize(df_train,df_test,target,cat_cols,scale_target=False):
+  
   cols=list(df_train)
-  cols.remove(target)
-  df_train_scaled=pd.DataFrame(X_train,columns=cols)
-  df_train_scaled[target]=df_train[target]
-  X_test = df_test.drop(target,axis=1).values
-  X_test = quantile_transform(X_test, random_state=0, copy=True)
+  cat_cols.append(target)
+  cols_en=[]
+  for i in cols:
+    if i not in cat_cols:
+      cols_en.append(i)
+  X_train=df_train.drop(cat_cols,axis=1).values
+  print(list(X_train))
+  X_train =quantile_transform(X_train, random_state=0, copy=True)
+  df_train_scaled=pd.DataFrame(X_train,columns=cols_en)
+
+  cols=list(df_train)
+  for col in cols:
+    if col not in cols_en:
+      df_train_scaled[col]=df_train[col]
+  
+  
   cols=list(df_test)
-  cols.remove(target)
-  df_test_scaled=pd.DataFrame(X_test,columns=cols)
-  df_test_scaled[target]=df_test[target]
+  cat_cols.append(target)
+  cols_en=[]
+  for i in cols:
+    if i not in cat_cols:
+      cols_en.append(i)
+  X_test=df_test.drop(cat_cols,axis=1).values
+  X_test =quantile_transform(X_test, random_state=0, copy=True)
+  df_test_scaled=pd.DataFrame(X_test,columns=cols_en)
+
+  cols=list(df_test)
+  for col in cols:
+    if col not in cols_en:
+      df_test_scaled[col]=df_test[col]
   if scale_target:
     scale = StandardScaler()
     X = df_train_scaled[[target]].values
@@ -176,12 +193,12 @@ encode_f=False, scale_target_f=False, threshold=0.35, factor=2,cols_to_drop=[],c
   if impute_f:
     df_train,df_test=impute(df_train,df_test)
 
-  #encode categorical variables
-  if encode_f:
-    df_train,df_test=encode(df_train,df_test,target,cat_col_thresh,en_strategy)
-
+  cat_cols=find_categorical_cols(df_train,target,cat_col_thresh)
   #normalize numerical data
   if normalize_f:
-    df_train,df_test=normalize(df_train,df_test,target,scale_target_f)
+    df_train,df_test=normalize(df_train,df_test,target,cat_cols,scale_target_f)
+  #encode categorical variables
+  if encode_f:
+    df_train,df_test=encode(df_train,df_test,target,cat_col_thresh,cat_cols,en_strategy)
 
   return df_train,df_test
